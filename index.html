@@ -1,597 +1,685 @@
 <!DOCTYPE html>
 <html lang="he" dir="rtl">
 <head>
-<link rel="apple-touch-icon" href="icon.jpg">
-<link rel="icon" type="image/jpg" href="icon.jpg">
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>מועדון הבנים | רק הבנים ואריא</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Heebo & Assistant -->
+    <link rel="apple-touch-icon" href="icon.jpg">
+    <link rel="icon" type="image/jpeg" href="icon.jpg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@400;600;700;800&family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: {
-                        sans: ['Heebo', 'Assistant', 'sans-serif'],
-                    },
-                    colors: {
-                        cream: '#FAF9F6',
-                        navy: '#1E293B',
-                        terracotta: {
-                            50: '#FFF7ED',
-                            100: '#FFEDD5',
-                            500: '#E07A5F',
-                            600: '#C8644A',
-                        },
-                        sage: {
-                            50: '#F2F7F4',
-                            100: '#E1ECE6',
-                            500: '#52796F',
-                            600: '#354F52',
-                        }
-                    }
-                }
-            }
-        }
-    </script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Heebo', 'Assistant', sans-serif;
-            background-color: #FAF9F6;
-            color: #1E293B;
+        :root {
+            --bg-main: #f4f6f9;
+            --card-bg: #ffffff;
+            --primary: #1e3a8a;
+            --primary-light: #eff6ff;
+            --accent: #f59e0b;
+            --accent-bg: #fffbeb;
+            --success: #10b981;
+            --success-bg: #ecfdf5;
+            --text-dark: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
             -webkit-tap-highlight-color: transparent;
         }
 
-        ::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-        }
-        ::-webkit-scrollbar-track {
-            background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: #CBD5E1;
-            border-radius: 999px;
+        body {
+            font-family: 'Heebo', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-dark);
+            line-height: 1.5;
+            padding-bottom: 40px;
         }
 
-        .no-scrollbar::-webkit-scrollbar {
+        .container {
+            max-width: 540px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+            color: white;
+            border-radius: 24px;
+            padding: 24px 20px;
+            text-align: center;
+            box-shadow: 0 10px 25px -5px rgba(30, 58, 138, 0.35);
+            margin-bottom: 16px;
+        }
+
+        .hero h1 {
+            font-size: 28px;
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 2px;
+        }
+
+        .hero .subtitle {
+            font-size: 16px;
+            font-weight: 500;
+            color: #dbeafe;
+            margin-bottom: 18px;
+        }
+
+        .countdown-box {
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 14px 10px;
+            margin-bottom: 16px;
+        }
+
+        .countdown-label {
+            font-size: 13px;
+            color: #bfdbfe;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .countdown-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            direction: ltr;
+        }
+
+        .time-unit {
+            background: rgba(15, 23, 42, 0.25);
+            border-radius: 12px;
+            padding: 8px 4px;
+        }
+
+        .time-num {
+            display: block;
+            font-size: 22px;
+            font-weight: 800;
+            line-height: 1.1;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .time-txt {
+            font-size: 11px;
+            color: #dbeafe;
+        }
+
+        .mom-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            background: #ffffff;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 800;
+            font-size: 15px;
+            padding: 12px 18px;
+            border-radius: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: transform 0.15s ease;
+        }
+
+        .mom-btn:active {
+            transform: scale(0.98);
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 22px;
+            padding: 18px;
+            box-shadow: var(--shadow);
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-dark);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .reset-btn {
+            background: #f1f5f9;
+            border: none;
+            color: var(--text-muted);
+            font-family: inherit;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 6px 10px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .bottles-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+        }
+
+        .bottle-btn {
+            background: #f8fafc;
+            border: 2px solid var(--border);
+            border-radius: 16px;
+            padding: 12px 4px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            font-family: inherit;
+        }
+
+        .bottle-btn.checked {
+            background: var(--success-bg);
+            border-color: var(--success);
+            color: #065f46;
+        }
+
+        .bottle-icon {
+            font-size: 20px;
+            margin-bottom: 4px;
+        }
+
+        .bottle-num {
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .bottle-time {
+            font-size: 11px;
+            color: var(--success);
+            font-weight: 700;
+            margin-top: 2px;
+            min-height: 16px;
+        }
+
+        .tabs-nav {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: #e2e8f0;
+            padding: 5px;
+            border-radius: 16px;
+            margin-bottom: 14px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 4px;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.15s ease;
+            line-height: 1.25;
+        }
+
+        .tab-btn.active {
+            background: #ffffff;
+            color: var(--primary);
+            box-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+        }
+
+        .tab-panel {
             display: none;
         }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+
+        .tab-panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease;
         }
 
-        @keyframes pulseRing {
-            0% { transform: scale(0.85); opacity: 0.85; }
-            100% { transform: scale(2); opacity: 0; }
-        }
-        .live-dot::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            border-radius: 50%;
-            background-color: #10B981;
-            animation: pulseRing 1.6s infinite;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .smooth-transition {
-            transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+        .schedule-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .schedule-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px;
+            background: #f8fafc;
+            border-radius: 14px;
+            border-right: 4px solid var(--primary);
+        }
+
+        .schedule-item.highlight {
+            background: var(--accent-bg);
+            border-right-color: var(--accent);
+        }
+
+        .schedule-time {
+            min-width: 58px;
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--primary);
+            text-align: right;
+            padding-top: 1px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .schedule-item.highlight .schedule-time {
+            color: #b45309;
+        }
+
+        .schedule-desc {
+            flex: 1;
+            font-size: 14.5px;
+            color: var(--text-dark);
+        }
+
+        .schedule-desc strong {
+            display: block;
+            font-weight: 800;
+            margin-bottom: 2px;
+        }
+
+        .schedule-desc span {
+            color: var(--text-muted);
+            font-size: 13.5px;
+            display: block;
+        }
+
+        .tip-card {
+            background: #f8fafc;
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+
+        .tip-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .tip-title {
+            font-weight: 800;
+            font-size: 15px;
+            color: var(--primary);
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tip-text {
+            font-size: 14px;
+            color: #334155;
+            line-height: 1.55;
+        }
+
+        .section-divider {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin: 16px 0 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px dashed var(--border);
         }
     </style>
 </head>
-<body class="min-h-screen pb-24 selection:bg-amber-200 selection:text-slate-900">
+<body>
 
-    <!-- Toast Notification Container -->
-    <div id="toast-container" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 flex flex-col gap-2 w-11/12 max-w-sm pointer-events-none"></div>
+<div class="container">
+    <header class="hero">
+        <h1>מועדון הבנים 👦🏻👶🏻🐶</h1>
+        <div class="subtitle">רק הבנים ואריא</div>
 
-    <!-- Custom Confirmation Modal -->
-    <div id="confirm-modal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 hidden items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl border border-slate-100">
-            <div class="w-12 h-12 rounded-2xl bg-amber-100 text-amber-600 flex items-center justify-center text-xl mb-4 mx-auto">
-                <i class="fa-solid fa-rotate-left"></i>
-            </div>
-            <h3 id="confirm-title" class="text-lg font-extrabold text-center text-slate-800 mb-2">לאפס נתונים?</h3>
-            <p id="confirm-desc" class="text-sm text-slate-500 text-center mb-6">פעולה זו תנקה את הסימונים ליום חדש.</p>
-            <div class="flex gap-3">
-                <button id="confirm-cancel" class="flex-1 py-3 px-4 rounded-2xl bg-slate-100 text-slate-700 font-bold hover:bg-slate-200 transition">ביטול</button>
-                <button id="confirm-ok" class="flex-1 py-3 px-4 rounded-2xl bg-rose-500 text-white font-bold hover:bg-rose-600 transition shadow-md shadow-rose-200">כן, לאפס</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ==================== HEADER & RETURN COUNTDOWN ==================== -->
-    <header class="bg-gradient-to-br from-slate-800 via-slate-900 to-[#283B42] text-white rounded-b-[2.5rem] shadow-xl pt-6 pb-8 px-4 relative overflow-hidden">
-        <!-- Decorative warm glow -->
-        <div class="absolute -top-16 -right-16 w-48 h-48 bg-amber-400/15 rounded-full blur-2xl pointer-events-none"></div>
-        <div class="absolute bottom-0 -left-12 w-40 h-40 bg-emerald-400/15 rounded-full blur-2xl pointer-events-none"></div>
-
-        <div class="max-w-xl mx-auto relative z-10">
-            <!-- Top Row -->
-            <div class="flex items-center justify-between mb-4">
-                <span class="inline-flex items-center gap-1.5 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-200 border border-white/15">
-                    <span>★</span> ערן • ליבי • גפן • אריא
-                </span>
-                <span id="today-date-badge" class="text-xs text-slate-300 font-medium bg-white/10 px-3 py-1 rounded-full"></span>
-            </div>
-
-            <!-- Title & Subtitle -->
-            <div class="mb-5">
-                <h1 class="text-3xl sm:text-4xl font-black tracking-tight text-white">
-                    מועדון הבנים
-                </h1>
-                <p class="text-amber-200/95 text-base sm:text-lg font-bold mt-1">
-                    רק הבנים ואריא 🧡
-                </p>
-            </div>
-
-            <!-- Live Return Countdown Box -->
-            <div class="bg-white/10 backdrop-blur-md border border-white/15 rounded-3xl p-4 sm:p-5 shadow-lg">
-                <div class="flex items-center justify-between mb-3">
-                    <div class="flex items-center gap-2.5">
-                        <span class="w-9 h-9 rounded-2xl bg-amber-400 text-slate-900 flex items-center justify-center font-bold text-sm shadow">
-                            <i class="fa-solid fa-heart"></i>
-                        </span>
-                        <div>
-                            <p class="text-xs text-slate-300 font-medium">ספירה לאחור עד שאמא נוחתת חזרה</p>
-                            <p id="countdown-status-text" class="text-sm font-bold text-white">יום ראשון, 29.11 • 16:30</p>
-                        </div>
-                    </div>
-                    <span class="text-xl">🏠</span>
+        <div class="countdown-box">
+            <div class="countdown-label" id="countdown-title">ספירה לאחור לחזרה של אמא</div>
+            <div class="countdown-grid" id="countdown-grid">
+                <div class="time-unit">
+                    <span class="time-num" id="days">00</span>
+                    <span class="time-txt">ימים</span>
                 </div>
-
-                <!-- Timer Numbers -->
-                <div dir="ltr" class="grid grid-cols-4 gap-2 sm:gap-3 text-center my-2">
-                    <div class="bg-slate-950/45 rounded-2xl py-2.5 px-1 border border-white/10">
-                        <div id="cd-days" class="text-2xl sm:text-3xl font-black tabular-nums text-white">00</div>
-                        <div class="text-[11px] text-slate-300 font-medium mt-0.5">ימים</div>
-                    </div>
-                    <div class="bg-slate-950/45 rounded-2xl py-2.5 px-1 border border-white/10">
-                        <div id="cd-hours" class="text-2xl sm:text-3xl font-black tabular-nums text-white">00</div>
-                        <div class="text-[11px] text-slate-300 font-medium mt-0.5">שעות</div>
-                    </div>
-                    <div class="bg-slate-950/45 rounded-2xl py-2.5 px-1 border border-white/10">
-                        <div id="cd-minutes" class="text-2xl sm:text-3xl font-black tabular-nums text-white">00</div>
-                        <div class="text-[11px] text-slate-300 font-medium mt-0.5">דקות</div>
-                    </div>
-                    <div class="bg-amber-400/20 rounded-2xl py-2.5 px-1 border border-amber-300/30">
-                        <div id="cd-seconds" class="text-2xl sm:text-3xl font-black tabular-nums text-amber-300">00</div>
-                        <div class="text-[11px] text-amber-100 font-medium mt-0.5">שניות</div>
-                    </div>
+                <div class="time-unit">
+                    <span class="time-num" id="hours">00</span>
+                    <span class="time-txt">שעות</span>
                 </div>
-
-                <!-- Trip Progress Bar -->
-                <div class="mt-3">
-                    <div class="flex justify-between text-[11px] text-slate-300 mb-1.5">
-                        <span id="trip-phase-label">מתכוננים לסופ״ש...</span>
-                        <span id="trip-percent-label" class="font-bold text-amber-300">0%</span>
-                    </div>
-                    <div class="w-full h-2 bg-slate-950/50 rounded-full overflow-hidden">
-                        <div id="trip-progress-bar" class="h-full bg-gradient-to-l from-amber-400 to-emerald-400 rounded-full transition-all duration-500" style="width: 0%"></div>
-                    </div>
+                <div class="time-unit">
+                    <span class="time-num" id="minutes">00</span>
+                    <span class="time-txt">דקות</span>
+                </div>
+                <div class="time-unit">
+                    <span class="time-num" id="seconds">00</span>
+                    <span class="time-txt">שניות</span>
                 </div>
             </div>
         </div>
+
+        <a href="https://parisis-trip.github.io/Parisis/" target="_blank" rel="noopener" class="mom-btn">
+            <span>🇫🇷</span>
+            <span>הלו״ז של אמא</span>
+        </a>
     </header>
 
-    <!-- ==================== MAIN CONTENT ==================== -->
-    <main class="max-w-xl mx-auto px-4 -mt-4 relative z-20 space-y-6">
-
-        <!-- 1. MOM'S SCHEDULE BUTTON CARD -->
-        <section class="bg-white rounded-3xl p-4 shadow-sm border border-stone-200/80">
-            <a href="https://parisis-trip.github.io/Parisis/" target="_blank" rel="noopener noreferrer"
-               class="w-full py-3.5 px-5 rounded-2xl bg-gradient-to-l from-amber-500 to-[#E07A5F] hover:opacity-95 active:scale-[0.99] text-white font-extrabold text-base shadow-md shadow-amber-200/70 transition flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <span class="w-9 h-9 rounded-xl bg-white/20 flex items-center justify-center text-lg">🗼</span>
-                    <span>הלו״ז של אמא</span>
-                </div>
-                <i class="fa-solid fa-arrow-up-right-from-square text-sm opacity-90"></i>
-            </a>
-        </section>
-
-        <!-- 2. DAILY 5 BOTTLES CHECKLIST GADGET + SLEEP TRACKER -->
-        <section class="bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80 space-y-6">
-            <div>
-                <div class="flex items-center justify-between mb-3">
-                    <div>
-                        <h2 class="text-lg font-extrabold text-slate-800 flex items-center gap-2">
-                            <span>🍼</span>
-                            <span>מעקב בקבוקים יומי</span>
-                        </h2>
-                        <p id="bottles-progress-text" class="text-xs text-slate-500 mt-0.5">הושלמו 0 מתוך 5 בקבוקים היום</p>
-                    </div>
-                    <button onclick="confirmReset('bottles')" class="text-xs text-slate-400 hover:text-rose-500 px-2.5 py-1 rounded-xl hover:bg-rose-50 transition">
-                        איפוס
-                    </button>
-                </div>
-                <div id="bottles-checklist-grid" class="grid grid-cols-5 gap-2">
-                    <!-- Rendered dynamically via JS -->
-                </div>
-            </div>
-
-            <!-- SLEEP / NAPS TRACKER -->
-            <div class="pt-4 border-t border-stone-100">
-                <div class="flex items-center justify-between mb-3">
-                    <div>
-                        <h3 class="font-extrabold text-slate-800 text-base flex items-center gap-1.5">
-                            <span>😴</span> <span>מעקב תנומות</span>
-                        </h3>
-                        <p id="wake-window-status" class="text-xs text-indigo-600 font-medium mt-0.5">מוכן לתיעוד תנומה</p>
-                    </div>
-                    <button onclick="confirmReset('naps')" class="text-xs text-slate-400 hover:text-rose-500 px-2.5 py-1 rounded-xl hover:bg-rose-50 transition">
-                        איפוס
-                    </button>
-                </div>
-
-                <!-- Live Sleep Timer -->
-                <div class="bg-indigo-50/70 rounded-2xl p-3.5 border border-indigo-100 mb-3 flex items-center justify-between">
-                    <div>
-                        <div class="flex items-center gap-2">
-                            <span id="nap-live-indicator" class="hidden relative w-2.5 h-2.5 rounded-full bg-emerald-500 live-dot"></span>
-                            <span id="nap-timer-label" class="text-xs font-semibold text-slate-600">טיימר שינה חי</span>
-                        </div>
-                        <div id="nap-stopwatch-display" dir="ltr" class="text-2xl font-black text-slate-800 tabular-nums mt-0.5 text-right">00:00:00</div>
-                    </div>
-                    <button id="nap-toggle-btn" onclick="toggleNapTimer()" class="py-3 px-4 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs sm:text-sm shadow-sm transition flex items-center gap-2">
-                        <i class="fa-solid fa-play"></i>
-                        <span>נרדם עכשיו</span>
-                    </button>
-                </div>
-
-                <!-- Manual Quick Add Naps -->
-                <div class="grid grid-cols-4 gap-2 mb-3">
-                    <button onclick="addQuickNap(25)" class="py-2 px-1.5 rounded-xl bg-stone-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 font-bold text-xs transition">+25 דק׳</button>
-                    <button onclick="addQuickNap(45)" class="py-2 px-1.5 rounded-xl bg-stone-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 font-bold text-xs transition">+45 דק׳</button>
-                    <button onclick="addQuickNap(60)" class="py-2 px-1.5 rounded-xl bg-stone-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 font-bold text-xs transition">+שעה</button>
-                    <button onclick="addQuickNap(120)" class="py-2 px-1.5 rounded-xl bg-stone-100 hover:bg-indigo-50 text-slate-700 hover:text-indigo-700 font-bold text-xs transition">+שעתיים</button>
-                </div>
-
-                <!-- Naps Log List -->
-                <div id="naps-list" class="space-y-2 max-h-40 overflow-y-auto"></div>
-            </div>
-        </section>
-
-        <!-- 3. GEFEN'S GUIDE – ORGANIZED INTO 4 CLEAN INTERACTIVE TABS -->
-        <section class="bg-white rounded-3xl p-5 shadow-sm border border-stone-200/80">
-            <div class="flex items-center justify-between mb-4">
-                <div>
-                    <span class="text-xs font-bold text-[#52796F] uppercase tracking-wider">טיפים והתנהלות</span>
-                    <h2 class="text-xl font-extrabold text-slate-800">מדריך לגפן 🌿</h2>
-                </div>
-                <span class="text-xs text-slate-400 bg-stone-100 px-3 py-1 rounded-full font-medium">בחרו נושא</span>
-            </div>
-
-            <!-- Interactive Topic Tabs -->
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-5">
-                <button onclick="switchGuideTab('schedule')" id="gtab-schedule"
-                        class="smooth-transition py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-extrabold flex items-center justify-center gap-1.5 bg-slate-800 text-white shadow-sm">
-                    <span>🗓️</span>
-                    <span>לו״ז אידיאלי</span>
-                </button>
-                <button onclick="switchGuideTab('activities')" id="gtab-activities"
-                        class="smooth-transition py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 bg-stone-100 text-slate-600 hover:bg-stone-200/70">
-                    <span>🐕</span>
-                    <span>פעילויות ועייפות</span>
-                </button>
-                <button onclick="switchGuideTab('sleep')" id="gtab-sleep"
-                        class="smooth-transition py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 bg-stone-100 text-slate-600 hover:bg-stone-200/70">
-                    <span>😴</span>
-                    <span>שינה נכונה</span>
-                </button>
-                <button onclick="switchGuideTab('outdoors')" id="gtab-outdoors"
-                        class="smooth-transition py-2.5 px-3 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 bg-stone-100 text-slate-600 hover:bg-stone-200/70">
-                    <span>🌤️</span>
-                    <span>בחוץ והסחות דעת</span>
-                </button>
-            </div>
-
-            <!-- TAB 1: IDEAL SCHEDULE (ALL TIMES ON THE RIGHT OF THE TEXT) -->
-            <div id="gpanel-schedule" class="space-y-2.5">
-                <!-- 06:30 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">06:30</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-800">בוקר טוב + בקבוק ראשון</div>
-                        <p class="text-xs text-slate-500 mt-1">פתיחת יום רגועה.</p>
-                    </div>
-                </div>
-
-                <!-- 07:30 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-indigo-800 bg-indigo-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">07:30</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-800">שנת בוקר (כשעה)</div>
-                        <p class="text-xs text-slate-500 mt-1 leading-relaxed">אם לוקחים את ליבי לגן, כנראה יישן פחות או לא יירדם לפני היציאה – וזה לגמרי בסדר.</p>
-                    </div>
-                </div>
-
-                <!-- 09:30 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">09:30</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">בקבוק שני</div>
-                </div>
-
-                <!-- 10:00 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-indigo-800 bg-indigo-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">10:00</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-800">שנת בוקר שנייה (כשעה)</div>
-                        <p class="text-xs text-slate-500 mt-1">תלוי אם וכמה ישן מוקדם יותר.</p>
-                    </div>
-                </div>
-
-                <!-- 12:30 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">12:30</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">בקבוק שלישי</div>
-                </div>
-
-                <!-- 13:00–15:00 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-indigo-800 bg-indigo-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">13:00–15:00</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">שנת צהריים</div>
-                </div>
-
-                <!-- 15:30 -->
-                <div class="bg-[#FAF9F6] rounded-2xl p-3.5 border border-stone-200/60 flex items-start gap-3">
-                    <span class="text-xs font-black text-amber-800 bg-amber-100 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">15:30</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">בקבוק רביעי</div>
-                </div>
-
-                <!-- 16:30 -->
-                <div class="bg-[#F2F7F4] rounded-2xl p-3.5 border border-emerald-200/80 flex items-start gap-3">
-                    <span class="text-xs font-black text-emerald-900 bg-emerald-200/80 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">16:30</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-900">🐕 סיבוב עם אריא</div>
-                        <p class="text-xs text-slate-700 mt-1 leading-relaxed">
-                            להכניס פעילות שתיצור עייפות לקראת השינה (למשל במנשא עם הפנים החוצה או בגינה הקטנה).
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 17:00–17:30 -->
-                <div class="bg-orange-50/80 rounded-2xl p-3.5 border border-orange-200/80 flex items-start gap-3">
-                    <span class="text-xs font-black text-orange-900 bg-orange-200/80 px-2.5 py-1 rounded-xl shrink-0" dir="ltr">17:00–17:30</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-900">שנת אחה״צ – השינה שמומלץ לא לוותר עליה</div>
-                        <p class="text-xs text-slate-700 mt-1 leading-relaxed">
-                            הכי קשה להיכנס אליה אבל הכי קצרה (20–30 דקות, מספיקה כדי לעבור את הערב בטוב).
-                        </p>
-                    </div>
-                </div>
-
-                <!-- 18:30 -->
-                <div class="bg-[#F2F7F4] rounded-2xl p-3.5 border border-emerald-200/70 flex items-start gap-3">
-                    <span class="text-xs font-black text-emerald-900 bg-white px-2.5 py-1 rounded-xl shrink-0 shadow-2xs" dir="ltr">18:30</span>
-                    <div>
-                        <div class="text-sm font-extrabold text-slate-800">🍼 בקבוק חמישי</div>
-                        <p class="text-xs text-slate-500 mt-0.5">סך הכל 5 בקבוקים ביום, בהפרשים של כ-3 שעות.</p>
-                    </div>
-                </div>
-
-                <!-- 18:45 -->
-                <div class="bg-[#F2F7F4] rounded-2xl p-3.5 border border-emerald-200/70 flex items-start gap-3">
-                    <span class="text-xs font-black text-emerald-900 bg-white px-2.5 py-1 rounded-xl shrink-0 shadow-2xs" dir="ltr">18:45</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">🛁 מקלחת נעימה</div>
-                </div>
-
-                <!-- 19:00 -->
-                <div class="bg-[#F2F7F4] rounded-2xl p-3.5 border border-emerald-200/70 flex items-start gap-3">
-                    <span class="text-xs font-black text-emerald-900 bg-white px-2.5 py-1 rounded-xl shrink-0 shadow-2xs" dir="ltr">19:00</span>
-                    <div class="text-sm font-extrabold text-slate-800 pt-0.5">🌙 הרדמה ללילה</div>
-                </div>
-            </div>
-
-            <!-- TAB 2: ACTIVITIES & TIRING HIM OUT -->
-            <div id="gpanel-activities" class="hidden space-y-3">
-                <div class="bg-[#F2F7F4] border border-emerald-200/70 rounded-2xl p-3.5 text-xs text-slate-700 leading-relaxed">
-                    <strong>פעילויות מעייפות ומהנות</strong> – אידיאליות במיוחד בשעות הצהריים ואחה״צ כדי לעזור לו להיכנס לשינה בקלות:
-                </div>
-
-                <div class="grid grid-cols-1 gap-3">
-                    <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70 flex items-start gap-3">
-                        <span class="text-2xl bg-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm shrink-0">🐕</span>
-                        <div>
-                            <h3 class="font-extrabold text-slate-800 text-sm mb-1">סיבוב עם אריא במנשא (פנים החוצה)</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">לצאת לטיול עם אריא כשהפנים של גפן כלפי חוץ – הגירויים והתנועה מעייפים אותו מצוין (אידיאלי לקראת שנת אחה״צ).</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70 flex items-start gap-3">
-                        <span class="text-2xl bg-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm shrink-0">👀</span>
-                        <div>
-                            <h3 class="font-extrabold text-slate-800 text-sm mb-1">זמן בטן בעגלה פתוחה</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">לפתוח את גגון העגלה כשהוא על הבטן כדי שיראה את העולם – מאמץ את חגורת הכתפיים ומעייף אותו.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70 flex items-start gap-3">
-                        <span class="text-2xl bg-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm shrink-0">🛝</span>
-                        <div>
-                            <h3 class="font-extrabold text-slate-800 text-sm mb-1">נדנדה גדולה בגינה הגדולה</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">להניח אותו לבד בנדנדה הגדולה (על הבטן או על הגב) – התנועה המונוטונית מרגיעה ומעייפת בלי שצריך להתנדנד יחד איתו.</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70 flex items-start gap-3">
-                        <span class="text-2xl bg-white w-11 h-11 rounded-2xl flex items-center justify-center shadow-sm shrink-0">🌳</span>
-                        <div>
-                            <h3 class="font-extrabold text-slate-800 text-sm mb-1">נדנדה בגינה הקטנה</h3>
-                            <p class="text-xs text-slate-600 leading-relaxed">לשבת איתו בנדנדה כשהוא במנשא עם הפנים החוצה.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Zero-Prop Extra Developmental & Sensory Ideas -->
-                <div class="pt-2">
-                    <div class="flex items-center gap-2 mb-2.5 px-1">
-                        <span class="text-sm">✨</span>
-                        <h3 class="text-xs font-extrabold text-amber-800 uppercase tracking-wide">עוד רעיונות לעייפות טבעית (בלי אביזרים מיוחדים)</h3>
-                    </div>
-
-                    <div class="grid grid-cols-1 gap-2.5">
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">🚲</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">עיסוי תינוקות ו״אופניים״ ברגליים</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">תנועות אופניים עדינות, כיפוף ברכיים לבטן ומתיחות ידיים – משחרר גזים, מפעיל שרירים ומעייף לפני שינה.</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">📖</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">קריאת ספרים וסיפורי תמונות</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">להראות איורים ברורים ולספר בקול משתנה – מיקוד המבט וההקשבה דורשים ריכוז גבוה שמעייף אותו.</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">😜</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">פרצופים, קולות וחיקויים פנים-אל-פנים</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">הוצאת לשון, חיוכים מוגזמים, קולות מצחיקים ומשחקי ״קוקו״ עם הידיים – פעילות חברתית אינטנסיבית שמתישה תינוקות לטובה.</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">🎶</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">שירים, דקלומים ומחיאות כפיים</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">לשיר שירים קצביים תוך כדי תיפוף עדין על הבטן או הרגליים (כמו ״עוגה עוגה״ או ״ידיים למעלה״).</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">🏠</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">סיור בבית (״מוזיאון הבית״)</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">להסתובב איתו בידיים בין חדרים, לתת לו לגעת במרקמים שונים (וילון, כרית, קיר קריר, עלה במרפסת) ולהסביר לו מה רואים.</p>
-                            </div>
-                        </div>
-
-                        <div class="bg-amber-50/55 rounded-2xl p-3.5 border border-amber-200/60 flex items-start gap-3">
-                            <span class="text-xl bg-white w-10 h-10 rounded-xl flex items-center justify-center shadow-2xs shrink-0">🪞</span>
-                            <div>
-                                <h4 class="font-extrabold text-slate-800 text-sm mb-0.5">שכיבה על הבטן מול מראה / מול ליבי</h4>
-                                <p class="text-xs text-slate-600 leading-relaxed">זמן בטן על השטיח כשליבי עושה לו הצגות ממול – שילוב מנצח של מאמץ פיזי וגירוי מליבי.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- TAB 3: SLEEP & SOOTHING TIPS -->
-            <div id="gpanel-sleep" class="hidden space-y-3">
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">🌑</span>
-                        <span>הסביבה האידיאלית</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        נכנס לשינה הכי טובה וארוכה במיטה שלו כשהחדר מוחשך (עובד גם במיטה של ליבי, אם כי קצת פחות טוב).
-                    </p>
-                </div>
-
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">🤫</span>
-                        <span>הרדמה עצמאית וסבלנות</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        הוא לא אוהב הרבה עזרה בהרדמה – צריך לתת לו לשכב לבד עם הרבה סבלנות.
-                    </p>
-                </div>
-
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">👶</span>
-                        <span>שיטת המוצץ</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        אם הוא משמיע רעשים כשאתה יוצא מהחדר – לחזור, לשים מוצץ ולצאת. לחזור, לשים מוצץ ולצאת. לחזור על זה כמה פעמים שצריך, הוא יודע להירדם לבד.
-                    </p>
-                </div>
-
-                <div class="bg-rose-50/70 rounded-2xl p-4 border border-rose-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-900 text-sm mb-1.5">
-                        <span class="text-lg">😢</span>
-                        <span>התעוררות בבכי = עדיין עייף</span>
-                    </div>
-                    <p class="text-xs text-slate-700 leading-relaxed">
-                        אם הוא קם בבכי, קודם כל לבדוק קאקי (הרבה פעמים זה מה שמעיר אותו) או אם נפל המוצץ. התעוררות בבכי אומרת שהוא לא סיים לישון – לא לעבור לפעילות, אלא לעזור לו לחזור לישון. כשהוא שבע משינה הוא קם מחויך וממלמל.
-                    </p>
-                </div>
-            </div>
-
-            <!-- TAB 4: OUTDOORS & FOCUS -->
-            <div id="gpanel-outdoors" class="hidden space-y-3">
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">🧐</span>
-                        <span>סקרנות יתר בחוץ</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        גפן מאוד סקרן לגבי העולם שבחוץ, מה שלפעמים מקשה עליו להירדם (ולעיתים רחוקות יותר גם לאכול).
-                    </p>
-                </div>
-
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">🛡️</span>
-                        <span>נטרול גירויים בעגלה</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        כשרוצים שירדם בחוץ, למקם את העגלה בפינה שקטה עם מינימום תנועה והסחות דעת.
-                    </p>
-                </div>
-
-                <div class="bg-[#FAF9F6] rounded-2xl p-4 border border-stone-200/70">
-                    <div class="flex items-center gap-2 font-extrabold text-slate-800 text-sm mb-1.5">
-                        <span class="text-lg">🎒</span>
-                        <span>מנשא סגור להרדמה</span>
-                    </div>
-                    <p class="text-xs text-slate-600 leading-relaxed">
-                        אפשר לשים אותו במנשא עם הפנים אליך ולסגור את כיסוי/תריס המנשא כדי לנתק אותו מהגירויים שמסביב.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-    </main>
-
-    <!-- Bottom Sticky Cheer Bar -->
-    <footer class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-stone-200/80 py-2.5 px-4 z-30">
-        <div class="max-w-xl mx-auto flex items-center justify-between text-xs text-slate-500">
-            <span class="font-medium">🧡 מועדון הבנים • רק הבנים ואריא</span>
-            <button onclick="celebrateDad()" class="bg-amber-100 hover:bg-amber-200 text-amber-900 font-extrabold px-3.5 py-1.5 rounded-full transition">
-                אלוף! 🏆
-            </button>
+    <section class="card">
+        <div class="card-header">
+            <div class="card-title">🍼 מעקב בקבוקים יומי</div>
+            <button type="button" class="reset-btn" onclick="resetBottles()">איפוס יום</button>
         </div>
-    </footer>
+        <div class="bottles-grid" id="bottles-grid"></div>
+    </section>
 
-    <script>
-        // ==================== DATES & COUNTDOWN ====================
-        const TRIP_START = new Date('2026-11-25T16:50:00+02:00').getTime();
-        const MOM_RETURN = new Date('2026-11-29T16:30:00+02:00').getTime();
-// ... existing code ... -->
-        // ==================== INITIALIZATION ====================
-        function renderAll() {
-            renderBottleChecks();
-            renderNaps();
+    <section class="card">
+        <nav class="tabs-nav" role="tablist">
+            <button type="button" class="tab-btn active" data-tab="schedule" onclick="switchTab('schedule')">לו״ז<br>אידיאלי</button>
+            <button type="button" class="tab-btn" data-tab="activities" onclick="switchTab('activities')">פעילויות<br>ועייפות</button>
+            <button type="button" class="tab-btn" data-tab="sleep" onclick="switchTab('sleep')">שינה<br>נכונה</button>
+            <button type="button" class="tab-btn" data-tab="outside" onclick="switchTab('outside')">בחוץ<br>והסחות</button>
+        </nav>
+
+        <div id="tab-schedule" class="tab-panel active">
+            <div class="schedule-list">
+                <div class="schedule-item">
+                    <div class="schedule-time">06:30</div>
+                    <div class="schedule-desc">
+                        <strong>בוקר טוב + בקבוק 1</strong>
+                        <span>פתיחת יום רגועה</span>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">07:30</div>
+                    <div class="schedule-desc">
+                        <strong>שנת בוקר (כשעה)</strong>
+                        <span>אם יוצאים עם ליבי, ייתכן שיישן פחות או יירדם מאוחר יותר וזה לגמרי בסדר</span>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">09:30</div>
+                    <div class="schedule-desc">
+                        <strong>בקבוק 2</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">10:00</div>
+                    <div class="schedule-desc">
+                        <strong>תנומת בוקר נוספת (כשעה)</strong>
+                        <span>בהתאם לכמה ישן מוקדם יותר</span>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">12:30</div>
+                    <div class="schedule-desc">
+                        <strong>בקבוק 3</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">13:00</div>
+                    <div class="schedule-desc">
+                        <strong>שנת צהריים (13:00–15:00)</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">15:30</div>
+                    <div class="schedule-desc">
+                        <strong>בקבוק 4</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item highlight">
+                    <div class="schedule-time">16:30</div>
+                    <div class="schedule-desc">
+                        <strong>סיבוב עם אריא</strong>
+                        <span>להכניס פעילות שתיצור עייפות לקראת השינה</span>
+                    </div>
+                </div>
+
+                <div class="schedule-item highlight">
+                    <div class="schedule-time">17:00</div>
+                    <div class="schedule-desc">
+                        <strong>שנת אחה״צ (20–30 דקות)</strong>
+                        <span>השינה שמומלץ לא לוותר עליה – הכי קשה להיכנס אליה אבל הכי קצרה, ונותנת כוח לסשן ערב</span>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">18:30</div>
+                    <div class="schedule-desc">
+                        <strong>בקבוק 5</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">18:45</div>
+                    <div class="schedule-desc">
+                        <strong>מקלחת</strong>
+                    </div>
+                </div>
+
+                <div class="schedule-item">
+                    <div class="schedule-time">19:00</div>
+                    <div class="schedule-desc">
+                        <strong>הרדמה ללילה</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="tab-activities" class="tab-panel">
+            <div class="tip-card">
+                <div class="tip-title">🐕 סיבוב עם אריא במנשא (פנים החוצה)</div>
+                <div class="tip-text">לצאת עם אריא כשגפן במנשא עם הפנים כלפי חוץ. הגירויים והתנועה מעייפים אותו מצוין, במיוחד לקראת שנת אחה״צ.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🛒 זמן בטן בעגלה עם גג פתוח</div>
+                <div class="tip-text">להשכיב על הבטן בעגלה כשהגג פתוח והוא רואה את העולם מסביב – מעייף ומסקרן אותו מאוד.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🛝 נדנדה גדולה בגינה הגדולה</div>
+                <div class="tip-text">מניחים אותו לבד בנדנדה הגדולה (על הבטן או על הגב) – בלי צורך להתנדנד יחד.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🌳 נדנדה בגינה הקטנה</div>
+                <div class="tip-text">לשבת איתו על הנדנדה בגינה הקטנה כשהוא במנשא ופונה החוצה.</div>
+            </div>
+
+            <div class="section-divider">עוד רעיונות לעייפות בלי אביזרים מיוחדים</div>
+
+            <div class="tip-card">
+                <div class="tip-title">🚲 ״אופניים״ ברגליים ועיסוי קל</div>
+                <div class="tip-text">בשכיבה על הגב, להניע בעדינות את הרגליים בתנועת דיווש ולשלב מתיחות קלות – משחרר גזים ומעייף את הגוף.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">😜 פרצופים, קולות וחיקויים</div>
+                <div class="tip-text">לשבת קרוב מולו, להוציא לשון, לעשות קולות מצחיקים ולחכות שינסה לחקות – עבודה מנטלית שמעייפת תינוקות במהירות.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">📖 קריאת ספר או שירים עם תנועות</div>
+                <div class="tip-text">הקראת סיפור קצר עם שינויי קול או שירים מוכרים עם מחיאות כפיים והרמת ידיים.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🏠 סיור ״הסברים״ בבית</div>
+                <div class="tip-text">סיבוב על הידיים בחדרים תוך כדי שמסבירים לו על חפצים (מקרר, תמונה, צמח) ונותנים לו לגעת במרקמים שונים.</div>
+            </div>
+        </div>
+
+        <div id="tab-sleep" class="tab-panel">
+            <div class="tip-card">
+                <div class="tip-title">🌑 חדר מוחשך במיטה שלו</div>
+                <div class="tip-text">נכנס לשינה הכי טובה וארוכה במיטה שלו כשהחדר מוחשך לגמרי. עובד גם במיטה של ליבי, אבל קצת פחות טוב.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🧘 הרדמה עצמאית – בלי הרבה עזרה</div>
+                <div class="tip-text">הוא לא אוהב הרבה עזרה בהרדמה וצריך לשכב לבד. צריך סבלנות: אם עושה רעשים כשאתה יוצא מהחדר – לחזור, לשים מוצץ ולצאת. לחזור, לשים מוצץ ולצאת, כמה פעמים שצריך.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">😢 התעוררות בבכי = עדיין עייף</div>
+                <div class="tip-text">אם קם בבכי, <strong>דבר ראשון לבדוק קאקי</strong> (הרבה פעמים זה מה שמעיר אותו). אם קם בבכי הוא לא סיים לישון – לא לעבור לפעילות אלא לעזור לו לחזור לישון (לפעמים חסר רק מוצץ). כשהוא שבע משינה הוא קם מחויך וממלמל.</div>
+            </div>
+        </div>
+
+        <div id="tab-outside" class="tab-panel">
+            <div class="tip-card">
+                <div class="tip-title">👀 סקרנות יתר בחוץ</div>
+                <div class="tip-text">גפן מאוד סקרן לגבי העולם החיצון, מה שלפעמים מקשה עליו להירדם בחוץ. כדאי לנטרל כמה שיותר רעשים והסחות דעת כשמגיע זמן שינה.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🍼 אוכל בחוץ</div>
+                <div class="tip-text">עם אוכל בחוץ יש לו פחות בעיה והוא בדרך כלל אוכל טוב גם כשיש עניין מסביב.</div>
+            </div>
+
+            <div class="tip-card">
+                <div class="tip-title">🎒 טריק המנשא להרדמה בחוץ</div>
+                <div class="tip-text">להעמיד את העגלה בפינה שקטה, או לשים אותו במנשא עם הפנים אליך ולסגור לו את הכיסוי/תריס של המנשא כדי שלא יהיה חשוף לכל מה שקורה מסביב.</div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script>
+    const targetDate = new Date('2026-11-29T16:30:00+02:00').getTime();
+
+    function updateCountdown() {
+        const now = Date.now();
+        const diff = targetDate - now;
+
+        if (diff <= 0) {
+            document.getElementById('countdown-title').textContent = 'אמא נחתה! ברוכה הבאה הביתה 🎉';
+            document.getElementById('days').textContent = '00';
+            document.getElementById('hours').textContent = '00';
+            document.getElementById('minutes').textContent = '00';
+            document.getElementById('seconds').textContent = '00';
+            return;
         }
 
-        window.onload = function () {
+        const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+        document.getElementById('days').textContent = String(days).padStart(2, '0');
+        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
+        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
+        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+    }
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+
+    function switchTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.tab === tabId);
+        });
+        document.querySelectorAll('.tab-panel').forEach(panel => {
+            panel.classList.toggle('active', panel.id === 'tab-' + tabId);
+        });
+    }
+
+    const STORAGE_KEY = 'boys_club_bottles_v1';
+
+    function getTodayKey() {
+        const d = new Date();
+        return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+    }
+
+    function loadBottlesState() {
+        try {
+            const raw = localStorage.getItem(STORAGE_KEY);
+            if (!raw) return { date: getTodayKey(), items: [null, null, null, null, null] };
+            const parsed = JSON.parse(raw);
+            if (parsed.date !== getTodayKey()) {
+                return { date: getTodayKey(), items: [null, null, null, null, null] };
+            }
+            return parsed;
+        } catch (e) {
+            return { date: getTodayKey(), items: [null, null, null, null, null] };
+        }
+    }
+
+    function saveBottlesState(state) {
+        try {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        } catch (e) {}
+    }
+
+    function renderBottles() {
+        const state = loadBottlesState();
+        const grid = document.getElementById('bottles-grid');
+        grid.innerHTML = '';
+
+        state.items.forEach((timeStr, idx) => {
+            const isChecked = Boolean(timeStr);
+            const btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'bottle-btn' + (isChecked ? ' checked' : '');
+            btn.onclick = () => toggleBottle(idx);
+            btn.innerHTML = `
+                <span class="bottle-icon">${isChecked ? '✅' : '🍼'}</span>
+                <span class="bottle-num">בקבוק ${idx + 1}</span>
+                <span class="bottle-time">${timeStr || ''}</span>
+            `;
+            grid.appendChild(btn);
+        });
+    }
+
+    function toggleBottle(index) {
+        const state = loadBottlesState();
+        if (state.items[index]) {
+            state.items[index] = null;
+        } else {
             const now = new Date();
-// ... existing code ... -->
+            const hh = String(now.getHours()).padStart(2, '0');
+            const mm = String(now.getMinutes()).padStart(2, '0');
+            state.items[index] = `${hh}:${mm}`;
+        }
+        saveBottlesState(state);
+        renderBottles();
+    }
+
+    function resetBottles() {
+        saveBottlesState({ date: getTodayKey(), items: [null, null, null, null, null] });
+        renderBottles();
+    }
+
+    renderBottles();
+</script>
+
+</body>
+</html>
